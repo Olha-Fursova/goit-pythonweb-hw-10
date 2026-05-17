@@ -46,4 +46,6 @@ class User(Base):
 
     confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
 
+    verification_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
     contacts = relationship("Contact", back_populates="user")

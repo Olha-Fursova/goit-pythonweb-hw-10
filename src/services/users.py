@@ -15,3 +15,6 @@ class UserService:
 
     async def create_user(self, body):
         return await self.repository.create_user(body)
+    
+    async def confirm_email(self, token):
+        return await self.repository.confirm_email(token)
