@@ -16,3 +16,17 @@ class ContactResponse(ContactModel):
 
     class Config:
         from_attributes = True
+
+class UserModel(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+
+class UserResponse(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    avatar: str | None = None
+
+    class Config:
+        from_attributes = True
