@@ -4,6 +4,8 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.db import get_db
+from src.database.models import User
+from src.services.dependencies import get_current_user
 from src.schemas import ContactModel, ContactResponse
 from src.services.contacts import ContactService
 
@@ -11,10 +13,13 @@ router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 @router.get("/", response_model=List[ContactResponse])
 async def read_contacts(
-    skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     contact_service = ContactService(db)
-    contacts = await contact_service.get_contacts(skip, limit)
+    contacts = await contact_service.get_contacts(skip, limit, current_user)
     return contacts
 
 @router.post("/", response_model=ContactResponse, status_code=status.HTTP_201_CREATED)
