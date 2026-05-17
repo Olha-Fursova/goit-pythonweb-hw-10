@@ -18,7 +18,8 @@ dependencies = [
     "passlib (>=1.7.4,<2.0.0)",
     "python-jose (>=3.5.0,<4.0.0)",
     "python-multipart (>=0.0.28,<0.0.29)",
-    "bcrypt (>=5.0.0,<6.0.0)"
+    "pydantic[email] (>=2.13.4,<3.0.0)",
+    "bcrypt (==4.0.1)"
 ]
 
 
