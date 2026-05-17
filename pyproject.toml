@@ -1,0 +1,19 @@
+[project]
+name = "goit-pythonweb-hw-10"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Olha Fursova",email = "teor15manypeople1@gmail.com"}
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi (>=0.136.1,<0.137.0)",
+    "alembic (>=1.18.4,<2.0.0)",
+    "sqlalchemy (>=2.0.49,<3.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
