@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Path
+from fastapi import APIRouter, Depends, HTTPException, status, Path, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,8 +7,9 @@ from src.schemas import UserModel, UserResponse
 from src.services.users import UserService
 from src.services.auth import (
     verify_password,
-    create_access_token
+    create_access_token,
 )
+from src.services.email import send_verification_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -19,38 +20,26 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 )
 async def signup(
     body: UserModel,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db)
 ):
     service = UserService(db)
 
-    email_user = await service.get_by_email(body.email)
-
-    if email_user:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Email already exists"
-        )
-
-    username_user = await service.get_by_username(body.username)
-
-    if username_user:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Username already exists"
-        )
+    if await service.get_by_email(body.email):
+        raise HTTPException(status_code=409, detail="Email or username already exists")
+    
+    if await service.get_by_username(body.username):
+        raise HTTPException(status_code=409, detail="Email or username already exists")
 
     user = await service.create_user(body)
 
-    return {
-        "user": {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email,
-            "avatar": user.avatar,
-            "confirmed": user.confirmed
-        },
-        "verification_token": user.verification_token
-    }
+    background_tasks.add_task(
+        send_verification_email,
+        email=user.email,
+        token=user.verification_token,
+    )
+ 
+    return UserResponse.model_validate(user)
 
 @router.post("/login")
 async def login(

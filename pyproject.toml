@@ -20,7 +20,8 @@ dependencies = [
     "python-multipart (>=0.0.28,<0.0.29)",
     "pydantic[email] (>=2.13.4,<3.0.0)",
     "bcrypt (==4.0.1)",
-    "cloudinary (>=1.44.2,<2.0.0)"
+    "cloudinary (>=1.44.2,<2.0.0)",
+    "fastapi-mail (>=1.6.4,<2.0.0)"
 ]
 
 

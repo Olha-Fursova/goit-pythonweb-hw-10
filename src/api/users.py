@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 import shutil
 import os
@@ -16,7 +16,7 @@ ALLOWED_TYPES = ["image/jpeg", "image/png", "image/jpg"]
 
 @router.get("/me")
 @limiter.limit("5/minute")
-async def read_me(current_user: User = Depends(get_current_user)):
+async def read_me(request: Request, current_user: User = Depends(get_current_user)):
     return {
         "id": current_user.id,
         "username": current_user.username,

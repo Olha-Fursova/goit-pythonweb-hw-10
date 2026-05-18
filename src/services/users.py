@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.repository.users import UserRepository
+from src.schemas import UserModel
 
 
 class UserService:
@@ -13,8 +14,8 @@ class UserService:
     async def get_by_username(self, username: str):
         return await self.repository.get_user_by_username(username)
 
-    async def create_user(self, body):
+    async def create_user(self, body: UserModel):
         return await self.repository.create_user(body)
     
-    async def confirm_email(self, token):
+    async def confirm_email(self, token: str):
         return await self.repository.confirm_email(token)
