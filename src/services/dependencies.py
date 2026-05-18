@@ -17,9 +17,9 @@ async def get_current_user(
     db: AsyncSession = Depends(get_db)
 ):
 
-    username = decode_access_token(token)
+    user_id = decode_access_token(token)
 
-    if username is None:
+    if user_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials"
@@ -27,7 +27,7 @@ async def get_current_user(
 
     service = UserService(db)
 
-    user = await service.get_by_username(username)
+    user = await service.get_by_id(int(user_id))
 
     if user is None:
         raise HTTPException(
