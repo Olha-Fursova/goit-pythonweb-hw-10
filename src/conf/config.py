@@ -10,8 +10,12 @@ class Settings:
     SECRET_KEY = os.getenv("SECRET_KEY")
     ALGORITHM = os.getenv("ALGORITHM")
 
-    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
-    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_USERNAME: str = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD: str = os.getenv("MAIL_PASSWORD")
+    MAIL_FROM: str = os.getenv("MAIL_FROM", os.getenv("MAIL_USERNAME", ""))
+    MAIL_SERVER: str = os.getenv("MAIL_SERVER", "smtp.gmail.com")
+    MAIL_PORT: int = int(os.getenv("MAIL_PORT", "465"))
+    MAIL_FROM_NAME: str = os.getenv("MAIL_FROM_NAME", "Contacts App")
 
     CLOUDINARY_NAME = os.getenv("CLOUDINARY_NAME")
     CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
